@@ -1,0 +1,779 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>shaggy's game</title>
+	
+	<style>
+	html{
+	overflow:hidden;
+	}
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+		
+	</style>
+	<script src="sessvars.js"></script>
+	<script src="pixi.js"></script>
+	<script src="../../src/pixi/renderers/WebGLRenderer.js"></script>
+</head>
+<body>
+
+<div align="center"><font color="#ff0000" id="score1"></font></div>
+	<script>
+	//]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+		var stop =0;
+		var f1=1;
+		var f2=1;
+		var f3=1;
+		var f4=1;
+		var f5=1;
+		var f6=1;
+	//]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+	var deathofenemy = new Audio('boom.wav');
+	var deathofplayer = new Audio('boom1.wav');
+	var koko1=1;//sessvars.user1;
+	var koko2=sessvars.user2;
+	var enemymover=0;
+	var misslecount=0;
+	var misslecountnew=0;
+	var misslecountt=0;
+	var misslecountalt;
+	var misslecountaltnew;
+	var misslecountaltt;
+	var enemywaves=50;
+	var enemynumber=0;
+	var enemynumberalt;
+	var enemies=[];
+	var missles=[];
+	var misslesnew=[];
+	var miss=[];
+	var lolo=[];
+	var lolocount=0;
+	var lolocountalt=0;
+	var muted=0;
+	soundEmbed = document.createElement("embed");
+			soundEmbed.setAttribute("src", "audio.wav");
+			soundEmbed.setAttribute("hidden", true);
+			soundEmbed.setAttribute("autostart", true);
+			soundEmbed.setAttribute("loop", true);
+			soundEmbed.setAttribute("type", "application/x-mplayer2");
+			document.body.appendChild(soundEmbed);
+	//var enemiesContainer = new PIXI.DisplayObjectContainer();
+	//enemiesContainer.position.x=-250;
+	var xy=0;
+	var reset=0;
+	var h=0;
+	var h2=0;
+	var xpos;
+	var ypos;
+	sessvars.username=h;
+	sessvars.username2=h2;
+	document.onmousemove=function(e){
+	xpos=e.pageX;
+	ypos=e.pageY;
+	}
+	var interactive = true;
+	var stage = new PIXI.Stage(0xFFFFFF, interactive);
+	var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight-0.04*window.innerHeight,null,true);
+	//renderer.view.style.position = "absolute";
+	//renderer.view.style.top = "0px";
+	//renderer.view.style.left = "0px";
+	document.body.appendChild(renderer.view);
+	 //calling the infinite loop
+	 var missle1ttt = PIXI.Texture.fromImage("fire2.png");
+	var bgt= PIXI.Texture.fromImage("mybg.png");
+	var bg = new PIXI.Sprite(bgt);
+	bg.scale.x=(1/bg.width)*(4/5)*window.innerWidth;
+	bg.scale.y=(1/bg.height)*2*window.innerHeight;
+	//bg.scale.y=(1/3000)*1*window.innerHeight;	
+	var bg1 = new PIXI.Sprite(bgt);
+	bg1.scale.x=(1/bg.width)*(4/5)*window.innerWidth;
+	bg1.scale.y=(1/bg.height)*2*window.innerHeight;
+	intialize();
+
+	//initilization-------------------------
+	function intialize(){
+		bg.position.x = 0;
+	bg.position.y = -window.innerHeight;
+	bg1.position.x = 0;
+	bg1.position.y = window.innerHeight;}
+	//--------------------------------------
+		stage.addChild(bg);
+	stage.addChild(bg1);
+	//player 1 plane---------------------
+	if(koko1==1){
+	var initialplane=PIXI.Texture.fromImage("plane1.png");
+	var plane1= new PIXI.Sprite(initialplane);
+	plane1.setInteractive(true);
+	stage.addChild(plane1);
+		plane1.scale.x = 1/18000*window.innerWidth;
+		plane1.scale.y = 1/9000*window.innerHeight;
+		plane1.position.x = 300;
+		plane1.position.y = 500;
+		plane1.anchor.x = 0.5;
+		plane1.anchor.y = 0.5;}
+	//-----------------------------------
+	//player2 plane----------------------
+		if(koko2==1){	
+	var initialplanez=PIXI.Texture.fromImage("plane1z.png");
+	var plane1z= new PIXI.Sprite(initialplanez);
+	plane1z.setInteractive(true);
+	stage.addChild(plane1z);
+		plane1z.scale.x = 1/18000*window.innerWidth;
+		plane1z.scale.y = 1/9000*window.innerHeight;
+		plane1z.position.x = 300;
+		plane1z.position.y = 500;
+		plane1z.anchor.x = 0.5;
+		plane1z.anchor.y = 0.5;
+		}
+		window.onkeydown = keydown;
+		function keydown(e)
+		{
+		 if(e.keyCode==37&&plane1z.position.x>0.026*window.innerWidth&&koko2==1)
+		 plane1z.position.x -=10;
+		 if(e.keyCode==39&&plane1z.position.x<0.774*window.innerWidth&&koko2==1)
+		 plane1z.position.x +=10;
+		 if(e.keyCode==38&& plane1z.position.y>0.04*window.innerHeight&&koko2==1)
+		 plane1z.position.y -=10;
+		 if(e.keyCode==40&& plane1z.position.y<window.innerHeight-0.04*window.innerHeight&&koko2==1)
+		 plane1z.position.y +=10;
+		 if(e.keyCode==32&&koko2==1)
+		 {
+				var missle3=new PIXI.Sprite(missle1ttt);
+				var missle4=new PIXI.Sprite(missle1ttt);
+				missle3.position.x=plane1z.position.x-0.01*window.innerWidth;
+				missle3.position.y=plane1z.position.y;
+				missle3.anchor.x=0.5;
+				missle3.anchor.y=2;
+				missle3.scale.x=(1/1366)*(1/4)*window.innerWidth;
+				missle3.scale.y=(1/665)*(1/4)*window.innerHeight;
+				misslesnew.push(missle3);
+				stage.addChild(missle3);
+				missle4.position.x=plane1z.position.x+0.01*window.innerWidth;
+				missle4.position.y=plane1z.position.y;
+				missle4.anchor.x=0.5;
+				missle4.anchor.y=2;
+				missle4.scale.x=(1/1366)*(1/4)*window.innerWidth;
+				missle4.scale.y=(1/665)*(1/4)*window.innerHeight;
+				misslesnew.push(missle4);
+				stage.addChild(missle4);
+				misslecountnew+=2;
+		 }
+		}
+		// space 32
+	//------------------------------------
+	var stript=PIXI.Texture.fromImage("strip.png");
+	var strip= new PIXI.Sprite(stript);
+	plane1.setInteractive(true);
+	stage.addChild(strip);
+		strip.scale.x = (1/strip.width)*(1/4)*window.innerWidth;
+		strip.scale.y = (1/strip.height)*window.innerHeight;
+		strip.position.x = (4/5)*window.innerWidth;
+		strip.position.y = 0;
+		//plane1.anchor.x = 0.5;
+		//plane1.anchor.y = 0.5;
+	
+	//enemy planes container isa--------------------
+	var initialenemyplane=PIXI.Texture.fromImage("plane2.png");
+	var enemyplane1= new PIXI.Sprite(initialenemyplane);
+	function enemyway(){
+	if(stop==0){
+	for(var i=0;i<2;i++){
+	var plane2= new PIXI.Sprite(initialenemyplane);
+	plane2.scale.x = 1/6000*window.innerWidth;
+	plane2.scale.y = 1/3000*window.innerHeight;
+	plane2.position.x = 0.05*window.innerWidth+(Math.random() * 0.6*window.innerWidth);
+	plane2.position.y =-0.1*window.innerHeight	;  //0.1*window.innerHeight+Math.random()*0.2*window.innerHeight;
+	enemies.push(plane2);
+	stage.addChild(plane2);
+	enemynumber+=1;
+						}
+		enemywaves+=1;
+		if(enemywaves==100){
+		clearwaves();
+		}
+	}}
+	function clearwaves(){
+	clearInterval(tid);
+	}	
+	var tid=setInterval('enemyway()',2000);
+	//------------------------------------
+	var exp= PIXI.Texture.fromImage("explosion.png");
+	var explosion = new PIXI.Sprite(exp);
+	var lop1=0;
+	var lop2=0;
+	//mute w unmute--------------------------------------------
+	var mutee = PIXI.Texture.fromImage("mute.png");
+	var mute = new PIXI.Sprite(mutee);
+	mute.position.x = window.innerWidth*0.82;
+	//mute.scale.x=0.08;
+	//mute.scale.y=0.08;
+	mute.position.y = (3/5)*window.innerHeight;
+	mute.setInteractive(true);
+	mute.mousedown = mute.touchstart = function(data){
+	if(muted==0){
+	document.body.removeChild(soundEmbed);
+	muted=1;
+	}
+			}
+			stage.addChild(mute);
+			
+	var umutee = PIXI.Texture.fromImage("unmute2.png");
+	var umute = new PIXI.Sprite(umutee);
+	umute.position.x = window.innerWidth*0.89;
+	//umute.scale.x=0.1;
+	//umute.scale.y=0.1;
+	umute.position.y = (3/5)*window.innerHeight;
+	umute.setInteractive(true);
+	umute.mousedown = umute.touchstart = function(data){
+	if(muted==1){
+	soundEmbed = document.createElement("embed");
+			soundEmbed.setAttribute("src", "audio.wav");
+			soundEmbed.setAttribute("hidden", true);
+			soundEmbed.setAttribute("autostart", true);
+			soundEmbed.setAttribute("loop", true);
+			soundEmbed.setAttribute("type", "application/x-mplayer2");
+			document.body.appendChild(soundEmbed);
+			muted=0;
+			}
+			}
+			stage.addChild(umute);
+	//buttons and their control--------------------------------
+	var textureButton1 = PIXI.Texture.fromImage("stop.png");
+	var textureButton2 = PIXI.Texture.fromImage("start.png");
+	var sbutton = new PIXI.Sprite(textureButton1);
+	var sbutton1 = new PIXI.Sprite(textureButton2);
+		sbutton.scale.x = 0.81;
+	//	sbutton.scale.y = 0.7;
+		sbutton1.scale.x = 0.81;
+	//	sbutton1.scale.y = 0.5;
+		sbutton.position.x = window.innerWidth*0.82;
+		sbutton.position.y = window.innerHeight*0.1;
+		sbutton1.position.x = window.innerWidth*0.82;
+		sbutton1.position.y = window.innerHeight*0.3;
+
+	sbutton.setInteractive(true);
+	sbutton1.setInteractive(true);
+sbutton.mousedown = sbutton.touchstart = function(data){
+			if(reset==0)
+			{
+			if(xy==0){
+			xy=1;
+			if(stop==0)
+			stop=1;
+			if(muted==0){
+			document.body.removeChild(soundEmbed);
+			muted=1;
+			}
+			}
+			}
+		}	
+sbutton1.mousedown = sbutton.touchstart = function(data){
+			//if condition 3shan a control el speed 3shan el hs
+			if(xy==1&&reset==0){
+			xy=0;
+			if(stop==1)
+			stop=0;
+			if(muted==1){
+			soundEmbed = document.createElement("embed");
+			soundEmbed.setAttribute("src", "audio.wav");
+			soundEmbed.setAttribute("hidden", true);
+			soundEmbed.setAttribute("autostart", true);
+			soundEmbed.setAttribute("loop", true);
+			soundEmbed.setAttribute("type", "application/x-mplayer2");
+			document.body.appendChild(soundEmbed);
+			muted=0;
+			}
+			requestAnimFrame( animate );}		
+		}			
+	stage.addChild(sbutton);
+	stage.addChild(sbutton1);
+//-------------------------------------------------------------
+
+var livestext1=PIXI.Texture.fromImage("lives.png");
+var live1= new PIXI.Sprite(livestext1);
+live1.position.y=0.8*window.innerHeight;
+live1.position.x=0.85*window.innerWidth;
+var livestext2=PIXI.Texture.fromImage("lives.png");
+var live2= new PIXI.Sprite(livestext2);
+live2.position.y=0.8*window.innerHeight;
+live2.position.x=0.875*window.innerWidth;
+var livestext3=PIXI.Texture.fromImage("lives.png");
+var live3= new PIXI.Sprite(livestext3);
+live3.position.y=0.8*window.innerHeight;
+live3.position.x=0.9*window.innerWidth;
+live1.scale.x=(1/live1.width)*0.02*window.innerWidth;
+live1.scale.y=(1/live1.height)*0.02*window.innerHeight;
+live2.scale.x=(1/live2.width)*0.02*window.innerWidth;
+live2.scale.y=(1/live2.height)*0.02*window.innerHeight;
+live3.scale.x=(1/live3.width)*0.02*window.innerWidth;
+live3.scale.y=(1/live3.height)*0.02*window.innerHeight;
+stage.addChild(live1);
+stage.addChild(live2);
+stage.addChild(live3);
+var lives=3;
+
+
+
+
+var livestext1=PIXI.Texture.fromImage("lives.png");
+var live11= new PIXI.Sprite(livestext1);
+live11.position.y=0.85*window.innerHeight;
+live11.position.x=0.85*window.innerWidth;
+var livestext2=PIXI.Texture.fromImage("lives.png");
+var live21= new PIXI.Sprite(livestext2);
+live21.position.y=0.85*window.innerHeight;
+live21.position.x=0.875*window.innerWidth;
+var livestext3=PIXI.Texture.fromImage("lives.png");
+var live31= new PIXI.Sprite(livestext3);
+live31.position.y=0.85*window.innerHeight;
+live31.position.x=0.9*window.innerWidth;
+live11.scale.x=(1/live11.width)*0.02*window.innerWidth;
+live11.scale.y=(1/live11.height)*0.02*window.innerHeight;
+live21.scale.x=(1/live21.width)*0.02*window.innerWidth;
+live21.scale.y=(1/live21.height)*0.02*window.innerHeight;
+live31.scale.x=(1/live31.width)*0.02*window.innerWidth;
+live31.scale.y=(1/live31.height)*0.02*window.innerHeight;
+stage.addChild(live11);
+stage.addChild(live21);
+stage.addChild(live31);
+var livess=3;
+
+
+
+//missles-------------------------------------------------
+requestAnimFrame( animate );
+var missle1t = PIXI.Texture.fromImage("fire1.png");
+plane1.mousedown=plane1.touchstart=function(data){
+this.isdown=true;
+var missle1=new PIXI.Sprite(missle1t);
+var missle2=new PIXI.Sprite(missle1t);
+missle1.position.x=plane1.position.x-0.01*window.innerWidth;
+missle1.position.y=plane1.position.y;
+missle1.anchor.x=0.5;
+missle1.anchor.y=2;
+missle1.scale.x=(1/1366)*(1/4)*window.innerWidth;
+missle1.scale.y=(1/665)*(1/4)*window.innerHeight;
+missles.push(missle1);
+stage.addChild(missle1);
+missle2.position.x=plane1.position.x+0.01*window.innerWidth;
+missle2.position.y=plane1.position.y;
+missle2.anchor.x=0.5;
+missle2.anchor.y=2;
+missle2.scale.x=(1/1366)*(1/4)*window.innerWidth;
+missle2.scale.y=(1/665)*(1/4)*window.innerHeight;
+missles.push(missle2);
+stage.addChild(missle2);
+misslecount+=2;
+}
+//--------------------------------------------------------
+//enemymissles--------------------------------------------
+function mis(){
+if(stop==0){
+var missle1tt = PIXI.Texture.fromImage("fire.png");
+var missle3=new PIXI.Sprite(missle1tt);
+missle3.position.x=Math.random() * 0.79*window.innerWidth;
+missle3.position.y=0;
+missle3.scale.x=(1/1366)*(1/4)*window.innerWidth;
+missle3.scale.y=(1/665)*(1/4)*window.innerHeight;
+miss.push(missle3);
+stage.addChild(missle3);
+misslecountt+=1;}
+}
+//missles1();
+function clearmiss(){
+	clearInterval(tid1);
+	}	
+var tid1=setInterval('mis()',2000);
+//--------------------------------------------------------
+//bonus yaryasa bonus-------------------------------------
+function bonuslife(){
+if(stop==0){
+	var x22=PIXI.Texture.fromImage("x2.png");
+	var x2=new PIXI.Sprite(x22);
+	x2.position.x=Math.random() * 0.79*window.innerWidth;
+	x2.position.y=0;
+	x2.scale.x=0.5;
+	x2.scale.y=0.5;
+	lolocount+=1;
+	lolo.push(x2);
+	stage.addChild(x2);
+}}
+var hghg=setInterval('bonuslife()',10000);
+//--------------------------------------------------------
+x=document.getElementById("score1");
+
+	function animate() {
+	//scores-------------------------------
+	x.innerHTML="player1 " +h+" player2 " +h2;//*plane1.scale.y*0.5;
+	//-------------------------------------
+	//tryout for removing enemies---------------------
+	//----------------------------------------
+	// enemiesContainer.removeChild(enemies[2]);
+	 
+	 
+		if(xy==0)
+	    requestAnimFrame( animate );
+		//background control ----------------
+		bg.position.y += 1;
+		bg1.position.y += 1;
+		if(bg.position.y ==0)
+		bg1.position.y =-2*window.innerHeight;
+		if(bg1.position.y ==0)
+		bg.position.y =-2*window.innerHeight;
+		//----------------------------------
+		//my plane control------------------
+		if(koko1==1){
+		if(xpos<0.774*window.innerWidth&&xpos>0.026*window.innerWidth&&ypos<window.innerHeight-0.04*window.innerHeight&&ypos>0.04*window.innerHeight)
+		plane1.position.x = xpos;
+		if(ypos<window.innerHeight-0.04*window.innerHeight&&ypos>0.04*window.innerHeight&&xpos<0.774*window.innerWidth&&xpos>0.026*window.innerWidth)
+		plane1.position.y = ypos;}
+		//----------------------------------
+		//enemy plane control---------------
+		enemynumberalt=enemynumber;
+		enemymover+=0.05;
+		for(var i=0;i<enemynumberalt;i++)
+		{
+		enemies[i].position.x=enemies[i].position.x+Math.sin(i*0.01+enemymover);
+		if(enemies[i].position.y>window.innerHeight)
+				{
+				stage.removeChild(enemies[i]);
+					enemies.splice(i,1);
+					enemynumber-=1;}
+		if(enemies[i].position.y>(0.05*window.innerHeight+Math.random()*0.1*window.innerHeight))
+		{
+		enemies[i].position.y=enemies[i].position.y+Math.sin(i*0.02+1/2*enemymover)+0.05;
+		}
+		else
+		enemies[i].position.y+=0.5;
+		}
+		enemynumberalt=enemynumber;
+		//----------------------------------
+		//bonus------------------------------
+		lolocountalt=lolocount;
+		for(var n=0;n<lolocountalt;n++)
+			{
+				lolo[n].position.y+=2;
+				if(koko1==1){
+				if(lolo[n].position.x>(plane1.position.x-plane1.width*0.5)&&lolo[n].position.x<(plane1.position.x+plane1.width*0.5)&&lolo[n].position.y>(plane1.position.y-plane1.height*0.5)&&lolo[n].position.y<(plane1.position.y+plane1.height*0.5)) 
+					{
+						stage.removeChild(lolo[n]);
+						lolo.splice(n,1);
+						lolocount-=1;
+						h=h*2;
+					}		}
+				if(koko2==1){
+				if(lolo[n].position.x>(plane1z.position.x-plane1z.width*0.5)&&lolo[n].position.x<(plane1z.position.x+plane1z.width*0.5)&&lolo[n].position.y>(plane1z.position.y-plane1z.height*0.5)&&lolo[n].position.y<(plane1z.position.y+plane1z.height*0.5)) 
+					{
+						stage.removeChild(lolo[n]);
+						lolo.splice(n,1);
+						lolocount-=1;
+						h2=h2*2;
+					}
+							}
+			}
+		lolocountalt=lolocount;		
+		//----------------------------------
+			misslecountaltt=misslecountt;
+			for(var i=0;i<misslecountaltt;i++)
+			{
+				miss[i].position.y+=2;
+				if(koko1==1){
+				if(miss[i].position.x>(plane1.position.x-plane1.width*0.5)&&miss[i].position.x<(plane1.position.x+plane1.width*0.5)&&miss[i].position.y>(plane1.position.y-plane1.height*0.5)&&miss[i].position.y<(plane1.position.y+plane1.height*0.5)) 
+					{lives-=1;
+					explosion.position.y=plane1.position.y;
+				explosion.position.x=plane1.position.x;
+				explosion.anchor.x=0.5;
+				explosion.anchor.y=0.5;
+				stage.addChild(explosion);
+				lop2=lop1;
+				
+					stage.removeChild(miss[i]);
+					miss.splice(i,1);
+					misslecountt-=1;
+					if(lives==0){
+					if(koko2==1)
+				{
+					koko1=0;
+					deathofplayer.play();
+					stage.removeChild(plane1);
+				}
+				if(koko2==0)
+				{
+				
+				koko1=0;
+				gameover();
+				}	}}}
+					if(koko2==1){
+				if(miss[i].position.x>(plane1z.position.x-plane1z.width*0.5)&&miss[i].position.x<(plane1z.position.x+plane1z.width*0.5)&&miss[i].position.y>(plane1z.position.y-plane1z.height*0.5)&&miss[i].position.y<(plane1z.position.y+plane1z.height*0.5)) 
+					{
+					livess-=1;
+					explosion.position.y=plane1z.position.y;
+				explosion.position.x=plane1z.position.x;
+				explosion.anchor.x=0.5;
+				explosion.anchor.y=0.5;
+				stage.addChild(explosion);
+				lop2=lop1;
+				
+					stage.removeChild(miss[i]);
+					miss.splice(i,1);
+					misslecountt-=1;
+					if(livess==0){
+					if(koko1==1)
+				{
+					koko2=0;
+					deathofplayer.play();
+					stage.removeChild(plane1z);
+				}
+				if(koko1==0)
+				{
+				koko2=0;
+				gameover();
+				}	}}}
+				if(miss[i].position.y>window.innerHeight)
+				{
+					stage.removeChild(miss[i]);
+					miss.splice(i,1);
+					misslecountt-=1;
+				}
+				
+			}	
+			misslecountaltt=misslecountt;
+		//missles control&collision detection-------------------
+		if(koko1==1){
+		misslecountalt=misslecount;
+		for(var j=0;j<misslecountalt;j++)
+		{
+				missles[j].position.y-=5;
+			if(missles[j].position.y<0)
+				{
+					stage.removeChild(missles[j]);
+					missles.splice(j,1);
+					misslecount-=1;
+				}
+			else
+			{
+			enemynumberalt=enemynumber;
+			for(var k=0;k<enemynumberalt;k++)
+			{
+				if(missles[j].position.x>enemies[k].position.x&&missles[j].position.x<(enemies[k].position.x+enemyplane1.width*1/6000*window.innerWidth)&&missles[j].position.y>enemies[k].position.y&&missles[j].position.y<(enemies[k].position.y+enemyplane1.height*1/3000*window.innerHeight))
+				{
+					stage.removeChild(enemies[k]);
+					enemies.splice(k,1);
+					enemynumber-=1;
+					//elmissle 3shan lw 3mlt el super bomb----
+					stage.removeChild(missles[j]);
+					missles.splice(j,1);
+					misslecount-=1;
+					h+=1;
+					sessvars.username=h;
+					deathofenemy.play();
+				}
+			}
+			enemynumberalt=enemynumber;
+			}
+		}
+		misslecountalt=misslecount;}
+		//collision detection------------------------
+		//missles brdo-------------------------------
+		if(koko2==1){
+		misslecountaltnew=misslecountnew;
+		for(var l=0;l<misslecountaltnew;l++)
+		{
+				misslesnew[l].position.y-=5;
+			if(misslesnew[l].position.y<0)
+				{
+					stage.removeChild(misslesnew[l]);
+					misslesnew.splice(l,1);
+					misslecountnew-=1;
+				}
+			else
+			{
+			enemynumberalt=enemynumber;
+			for(var m=0;m<enemynumberalt;m++)
+			{
+				if(misslesnew[l].position.x>enemies[m].position.x&&misslesnew[l].position.x<(enemies[m].position.x+enemyplane1.width*1/6000*window.innerWidth)&&misslesnew[l].position.y>enemies[m].position.y&&misslesnew[l].position.y<(enemies[m].position.y+enemyplane1.height*1/3000*window.innerHeight))
+				{
+					stage.removeChild(enemies[m]);
+					enemies.splice(m,1);
+					enemynumber-=1;
+					//elmissle 3shan lw 3mlt el super bomb----
+					stage.removeChild(misslesnew[l]);
+					misslesnew.splice(l,1);
+					misslecountnew-=1;
+					h2+=1;
+					sessvars.username2=h2;
+					deathofenemy.play();
+				}
+			}
+			enemynumberalt=enemynumber;
+			}
+		}
+		misslecountaltnew=misslecountnew;}
+		//------------------------------------------
+		enemynumberalt=enemynumber;
+		for(var k=0;k<enemynumberalt;k++)
+		{
+					if(koko1==1){
+			if(
+			((plane1.position.x-plane1.width*0.5)>enemies[k].position.x&&(plane1.position.y-plane1.height*0.5)>enemies[k].position.y
+			&&(plane1.position.x-plane1.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1.position.y-plane1.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1.position.x+plane1.width*0.5)>enemies[k].position.x&&(plane1.position.y-plane1.height*0.5)>enemies[k].position.y
+			&&(plane1.position.x+plane1.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1.position.y-plane1.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1.position.x+plane1.width*0.5)>enemies[k].position.x&&(plane1.position.y+plane1.height*0.5)>enemies[k].position.y
+			&&(plane1.position.x+plane1.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1.position.y+plane1.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1.position.x-plane1.width*0.5)>enemies[k].position.x&&(plane1.position.y+plane1.height*0.5)>enemies[k].position.y
+			&&(plane1.position.x-plane1.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1.position.y+plane1.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			)
+				{
+				lives-=1;
+				explosion.position.y=plane1.position.y;
+				explosion.position.x=plane1.position.x;
+				explosion.anchor.x=0.5;
+				explosion.anchor.y=0.5;
+				stage.addChild(explosion);
+				lop2=lop1;
+				stage.removeChild(enemies[k]);
+					enemies.splice(k,1);
+					enemynumber-=1;
+				if(lives==0){
+
+				if(koko2==1)
+				{
+					koko1=0;
+					deathofplayer.play();
+					stage.removeChild(plane1);
+				}
+				if(koko2==0)
+				{
+				koko1=0;
+				gameover();
+				}	}}}
+					if(koko2==1){
+			if(
+			((plane1z.position.x-plane1z.width*0.5)>enemies[k].position.x&&(plane1z.position.y-plane1z.height*0.5)>enemies[k].position.y
+			&&(plane1z.position.x-plane1z.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1z.position.y-plane1z.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1z.position.x+plane1z.width*0.5)>enemies[k].position.x&&(plane1z.position.y-plane1z.height*0.5)>enemies[k].position.y
+			&&(plane1z.position.x+plane1z.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1z.position.y-plane1z.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1z.position.x+plane1z.width*0.5)>enemies[k].position.x&&(plane1z.position.y+plane1z.height*0.5)>enemies[k].position.y
+			&&(plane1z.position.x+plane1z.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1z.position.y+plane1z.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			||((plane1z.position.x-plane1z.width*0.5)>enemies[k].position.x&&(plane1z.position.y+plane1z.height*0.5)>enemies[k].position.y
+			&&(plane1z.position.x-plane1z.width*0.5)<(enemies[k].position.x+enemyplane1.width*0.5*1/6000*window.innerWidth)
+			&&(plane1z.position.y+plane1z.height*0.5)<(enemies[k].position.y+enemyplane1.height*0.5*1/3000*window.innerHeight+50))
+			)
+				{
+				livess-=1;
+				explosion.position.y=plane1z.position.y;
+				explosion.position.x=plane1z.position.x;
+				explosion.anchor.x=0.5;
+				explosion.anchor.y=0.5;
+				stage.addChild(explosion);
+				lop2=lop1;
+				
+				stage.removeChild(enemies[k]);
+					enemies.splice(k,1);
+					enemynumber-=1;
+				if(livess==0){
+
+				if(koko1==1)
+				{
+					koko2=0;
+					deathofplayer.play();
+					stage.removeChild(plane1z);
+				}
+				if(koko1==0)
+				{
+				koko2=0;
+				gameover();
+				}	}}}
+				
+				
+		}
+		enemynumberalt=enemynumber;
+		//----------------------------------
+		function gameover(){
+				document.body.removeChild(soundEmbed);
+				clearmiss();
+				clearwaves();
+				clearInterval(hghg);
+				deathofplayer.play();
+				if(h>h2){
+				var got= PIXI.Texture.fromImage("gameover.png");}
+				if(h2>h){
+				var got= PIXI.Texture.fromImage("gameover - Copy.png");}
+				var  gameover= new PIXI.Sprite(got);
+				//document.body.removeChild(renderer.view);
+				stage.addChild(gameover);
+				gameover.scale.x=(1/1093)*(4/5)*window.innerWidth;
+				gameover.scale.y=(1/665)*window.innerHeight;
+				stage.removeChild(plane1);
+				stage.removeChild(enemies[k]);
+				
+		}
+		if(enemywaves==100&&enemies.length==0)
+		{
+			sessvars.username1=h;
+			sessvars.username2=h2;
+			sessvars.user1=koko1;
+			sessvars.user2=koko2;
+			document.body.removeChild(soundEmbed);
+			var win=window.open("new44.html", '_self');
+			//sessvars.lolo=lives;
+		}
+		
+		lop1=lop1+1;
+		if(lop1==(lop2+8))
+		{
+			stage.removeChild(explosion);
+			lop1=0;
+			lop2=0;
+		}
+		
+		
+		
+		if(lives==2&&f1==1)
+		{
+			f1=0;
+			stage.removeChild(live3);
+		}
+		if(lives==1&&f2==1)
+		{
+			f2=0;
+			stage.removeChild(live2);
+		}
+		if(livess==2&&f3==1)
+		{
+			f3=0;
+			stage.removeChild(live31);
+		}
+		if(livess==1&&f4==1)
+		{
+			f4=0;
+			stage.removeChild(live21);
+		}
+		if(lives==0&&f5==1)
+		{
+			f5=0;
+			stage.removeChild(live1);
+		}
+		if(livess==0&&f6==1)
+		{
+			f6=0;
+			stage.removeChild(live11);
+		}
+	    // render the stage   
+	    renderer.render(stage);
+	}
+	</script>
+
+	</body>
+</html>

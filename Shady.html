@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>shaggy's game</title>
+	<script src="pixi.js"></script>
+	<script src="sessvars.js"></script>
+</head>
+<body>
+	<script>
+	sessvars.user2=0;
+	var interactive = true;
+	var stage = new PIXI.Stage(0x000000, interactive);
+	var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
+	document.body.appendChild(renderer.view);
+	renderer.view.style.position = "absolute";
+	renderer.view.style.top = "0px";
+	renderer.view.style.left = "0px";
+	requestAnimFrame(animate);
+	var background = PIXI.Sprite.fromImage("f_16_fighting_falcon_fighter_aircraft-wide.jpg");
+	background.width  = window.innerWidth;
+    background.height = window.innerHeight;
+	stage.addChild(background);
+    var textureButton = PIXI.Texture.fromImage("Button (5).png");
+	var textureButtonDown = PIXI.Texture.fromImage("Button (7).png");
+	var textureButtonOver = PIXI.Texture.fromImage("Button (2).png");
+	var button = new PIXI.Sprite(textureButton);
+	button.position.x = 0.05*window.innerWidth;
+	button.position.y = 0.8*window.innerHeight;		
+	button.scale.x=(1/button.width)*0.1*window.innerWidth;
+	button.scale.y=(1/button.height)*0.075*window.innerHeight;
+	button.setInteractive(true);
+	stage.addChild(button);
+	var textureButton1 = PIXI.Texture.fromImage("button (5) - Copy.png");
+	var button1 = new PIXI.Sprite(textureButton1);
+	button1.position.x = 0.05*window.innerWidth;
+	button1.position.y = 0.7*window.innerHeight;		
+	button1.scale.x=(1/button.width)*0.09*window.innerWidth;
+	button1.scale.y=(1/button.height)*0.075*window.innerHeight;
+	button1.setInteractive(true);
+	stage.addChild(button1);
+	sessvars.kam=0;
+	sessvars.kam2=0;
+	button.mousedown = button.touchstart = function(data)
+    {
+		this.isdown = true;
+		this.setTexture(textureButtonDown);
+		this.alpha = 1;
+	}
+	button.mouseup = button.touchend = function(data)
+	{
+		this.isdown = false;
+		if(this.isOver)
+		{
+			this.setTexture(textureButtonOver);
+		}
+		else
+		{
+			this.setTexture(textureButton);
+		}
+	}
+	button.mouseover = function(data)
+	{
+		this.isOver = true;
+		if(this.isdown)return
+			this.setTexture(textureButtonOver)
+	}
+	button.mouseout = function(data)
+	{
+		this.isOver = false;
+		if(this.isdown)return
+			this.setTexture(textureButton)
+	}
+	button.click = function(data)
+	{
+		console.log("CLICK!");
+	}
+	button.tap = function(data)
+	{
+		console.log("TAP!!");
+	}
+	
+	button.click = button.tap = function()
+	{
+		var win=window.open("new4.html", '_self');
+    }
+button1.click = button.tap = function()
+	{
+		sessvars.user1=1;
+		sessvars.user2=1;
+    }
+	function animate()
+	{
+	    requestAnimFrame(animate);   	
+	    renderer.render(stage);	
+	}
+        		
+    </script>
+</body>
+</html>
